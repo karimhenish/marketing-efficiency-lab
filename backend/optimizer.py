@@ -190,10 +190,9 @@ def optimize(company):
             limits = ratio_limits[feature]
 
             if ratio < limits["p5"]:
-                return -1e9
-
+                raise optuna.TrialPruned()
             if ratio > limits["p95"]:
-                return -1e9
+                raise optuna.TrialPruned()
 
         # =====================================
         # Prediction
@@ -211,9 +210,10 @@ def optimize(company):
     # =====================================
     # Run Optimization
     # =====================================
-
+    sampler = optuna.samplers.TPESampler(seed=42)
     study = optuna.create_study(
-        direction="maximize"
+        direction="maximize",
+        sampler=sampler
     )
 
     study.optimize(
@@ -228,23 +228,29 @@ def optimize(company):
     current_prediction = model.predict(company)[0]
 
     best_prediction = study.best_value
+    best_params = study.best_params
 
-    improvement = (
-        (best_prediction - current_prediction)
-        / current_prediction
-    ) * 100
+    if best_prediction <= current_prediction:
+        optimized_prediction = current_prediction
+        improvement = 0.0
+        recommended_values = {}
+    else:
+        optimized_prediction = best_prediction
+        improvement = (
+            (optimized_prediction - current_prediction)
+            / current_prediction
+        ) * 100
+        recommended_values = best_params
 
     return {
-
         "current_prediction": float(current_prediction),
-
-        "optimized_prediction": float(best_prediction),
-
+        "optimized_prediction": float(optimized_prediction),
         "improvement_percent": float(improvement),
+        "recommended_values": recommended_values
+}
+        
 
-        "recommended_values": study.best_params
 
-    }
 
 def analyze(company):
 
