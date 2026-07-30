@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class HeroSection extends StatelessWidget {
-  const HeroSection({super.key});
+  final VoidCallback onLaunchDemo;
+
+  const HeroSection({
+    super.key,
+    required this.onLaunchDemo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +88,7 @@ class HeroSection extends StatelessWidget {
               ),
 
               OutlinedButton(
-                onPressed: () {},
+                onPressed: onLaunchDemo,
 
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(

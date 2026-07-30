@@ -10,8 +10,26 @@ import 'widgets/demo_section.dart';
 import 'widgets/results_section.dart';
 import 'widgets/footer_section.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final GlobalKey demoKey = GlobalKey();
+  void scrollToDemo() {
+    final context = demoKey.currentContext;
+
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 1200),
+        curve: Curves.easeInOutCubic,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,23 +40,23 @@ class HomePage extends StatelessWidget {
 
       body: SingleChildScrollView(
         child: Column(
-          children: const [
-  NavBar(),
+          children: [
+            const NavBar(),
 
-  HeroSection(),
+            HeroSection(onLaunchDemo: scrollToDemo),
 
-  StatsSection(),
+            const StatsSection(),
 
-  ResearchSection(),
+            const ResearchSection(),
 
-  DemoSection(),
+            DemoSection(key: demoKey),
 
-  ArchitectureSection(),
+            const ArchitectureSection(),
 
-  ResultsSection(),
+            const ResultsSection(),
 
-  FooterSection(),
-],
+            const FooterSection(),
+          ],
         ),
       ),
     );
