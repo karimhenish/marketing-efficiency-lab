@@ -227,33 +227,38 @@ def optimize(company):
     # =====================================
 
     current_prediction = model.predict(company)[0]
+
     best_prediction = study.best_value
     best_params = study.best_params
-    if best_prediction <= current_prediction:
-            
-            optimized_prediction = current_prediction
-            improvement = 0.0
-            recommended_values = {}
-    else:
-          optimized_prediction = best_prediction
-          improvement = (
-                       (optimized_prediction - current_prediction)
-        / current_prediction
-    ) * 100
 
-    recommended_values = best_params
+    if best_prediction <= current_prediction:
+
+        optimized_prediction = current_prediction
+        improvement = 0.0
+        recommended_values = {}
+
+    else:
+
+        optimized_prediction = best_prediction
+
+        improvement = (
+            (optimized_prediction - current_prediction)
+            / current_prediction
+        ) * 100
+
+        recommended_values = best_params
 
     return {
-             "current_prediction": float(current_prediction),
 
-    "optimized_prediction": float(optimized_prediction),
+        "current_prediction": float(current_prediction),
 
-    "improvement_percent": float(improvement),
+        "optimized_prediction": float(optimized_prediction),
 
-    "recommended_values": recommended_values
+        "improvement_percent": float(improvement),
 
-}
-         
+        "recommended_values": recommended_values
+
+    }         
 
 
 
