@@ -218,7 +218,7 @@ def optimize(company):
 
     study.optimize(
         objective,
-        n_trials=1
+        n_trials=500
     )
     
     # =====================================
