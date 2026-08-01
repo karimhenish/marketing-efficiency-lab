@@ -250,11 +250,8 @@ def optimize(company):
 }
         
 
-
-
 def analyze(company):
 
-    # Prediction الحالية
     company_df = prepare_features(
         company,
         feature_columns
@@ -262,17 +259,39 @@ def analyze(company):
 
     current_prediction = model.predict(company_df)[0]
 
-    # Optimization
-    optimization = optimize(company)
-
     return {
 
         "current_prediction": float(current_prediction),
 
-        "optimized_prediction": optimization["optimized_prediction"],
+        "optimized_prediction": float(current_prediction),
 
-        "improvement_percent": optimization["improvement_percent"],
+        "improvement_percent": 0.0,
 
-        "recommended_values": optimization["recommended_values"]
+        "recommended_values": {}
 
     }
+
+# def analyze(company):
+
+#     # Prediction الحالية
+#     company_df = prepare_features(
+#         company,
+#         feature_columns
+#     )
+
+#     current_prediction = model.predict(company_df)[0]
+
+#     # Optimization
+#     optimization = optimize(company)
+
+#     return {
+
+#         "current_prediction": float(current_prediction),
+
+#         "optimized_prediction": optimization["optimized_prediction"],
+
+#         "improvement_percent": optimization["improvement_percent"],
+
+#         "recommended_values": optimization["recommended_values"]
+
+#     }
