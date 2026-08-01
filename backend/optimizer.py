@@ -214,20 +214,13 @@ def optimize(company):
     study = optuna.create_study(
         direction="maximize",
         sampler=sampler
-
     )
-    print("OPTIMIZER VERSION 2")
 
-    try:
-        study.optimize(
+    study.optimize(
         objective,
-        n_trials=1
+        n_trials=500
     )
-    except Exception as e:
-      print("OPTIMIZE ERROR:", repr(e))
-      raise
-  
-    print("OPTIMIZATION DONE")
+    
     # =====================================
     # Final Results
     # =====================================
