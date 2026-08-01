@@ -211,10 +211,9 @@ def optimize(company):
     # =====================================
     # Run Optimization
     # =====================================
-    sampler = optuna.samplers.TPESampler(seed=42)
+
     study = optuna.create_study(
-        direction="maximize",
-        sampler=sampler
+        direction="maximize"
     )
 
     study.optimize(
@@ -229,60 +228,23 @@ def optimize(company):
     current_prediction = model.predict(company)[0]
 
     best_prediction = study.best_value
-    best_params = study.best_params
 
-    if best_prediction <= current_prediction:
-
-        optimized_prediction = current_prediction
-        improvement = 0.0
-        recommended_values = {}
-
-    else:
-
-        optimized_prediction = best_prediction
-
-        improvement = (
-            (optimized_prediction - current_prediction)
-            / current_prediction
-        ) * 100
-
-        recommended_values = best_params
+    improvement = (
+        (best_prediction - current_prediction)
+        / current_prediction
+    ) * 100
 
     return {
 
         "current_prediction": float(current_prediction),
 
-        "optimized_prediction": float(optimized_prediction),
+        "optimized_prediction": float(best_prediction),
 
         "improvement_percent": float(improvement),
 
-        "recommended_values": recommended_values
+        "recommended_values": study.best_params
 
-    }         
-
-
-
-
-
-
-    # best_prediction = study.best_value
-    
-    # improvement = (
-    #     (best_prediction - current_prediction)
-    #     / current_prediction
-    # ) * 100
-
-    # return {
-
-    #     "current_prediction": float(current_prediction),
-
-    #     "optimized_prediction": float(best_prediction),
-
-    #     "improvement_percent": float(improvement),
-
-    #     "recommended_values": study.best_params
-
-    # }
+    }
 
 def analyze(company):
 
