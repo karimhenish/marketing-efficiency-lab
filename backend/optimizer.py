@@ -214,13 +214,15 @@ def optimize(company):
     study = optuna.create_study(
         direction="maximize",
         sampler=sampler
-    )
 
+    )
+    print("OPTIMIZER VERSION 2")
+    
     study.optimize(
         objective,
-        n_trials=500
+        n_trials=1
     )
-    
+    print("OPTIMIZATION DONE")
     # =====================================
     # Final Results
     # =====================================
