@@ -186,13 +186,23 @@ def optimize(company):
         # =====================================
 
         for feature, ratio in business_ratios.items():
+            if ratio < limits["p5"]:
+                print(
+                    f"{feature}: {ratio} < {limits['p5']}"
+                )
+                raise optuna.TrialPruned()
 
+            if ratio > limits["p95"]:
+                print(
+                    f"{feature}: {ratio} > {limits['p95']}"
+                )
+                raise optuna.TrialPruned()          
             limits = ratio_limits[feature]
 
-            if ratio < limits["p5"]:
-                raise optuna.TrialPruned()
-            if ratio > limits["p95"]:
-                raise optuna.TrialPruned()
+            # if ratio < limits["p5"]:
+            #     raise optuna.TrialPruned()
+            # if ratio > limits["p95"]:
+            #     raise optuna.TrialPruned()
 
         # =====================================
         # Prediction
