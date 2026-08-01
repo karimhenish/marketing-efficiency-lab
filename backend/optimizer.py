@@ -217,11 +217,16 @@ def optimize(company):
 
     )
     print("OPTIMIZER VERSION 2")
-    
-    study.optimize(
+
+    try:
+        study.optimize(
         objective,
         n_trials=1
     )
+    except Exception as e:
+      print("OPTIMIZE ERROR:", repr(e))
+      raise
+  
     print("OPTIMIZATION DONE")
     # =====================================
     # Final Results
