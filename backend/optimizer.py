@@ -189,11 +189,12 @@ def optimize(company):
 
             limits = ratio_limits[feature]
 
-            # if ratio < limits["p5"]:
-            #     raise optuna.TrialPruned()
-            # if ratio > limits["p95"]:
-            #     raise optuna.TrialPruned()
-        optimization = optimize(company)
+            if ratio < limits["p5"]:
+                return -1e9
+
+            if ratio > limits["p95"]:
+                return -1e9
+
         # =====================================
         # Prediction
         # =====================================
@@ -210,17 +211,16 @@ def optimize(company):
     # =====================================
     # Run Optimization
     # =====================================
-    sampler = optuna.samplers.TPESampler(seed=42)
+
     study = optuna.create_study(
-        direction="maximize",
-        sampler=sampler
+        direction="maximize"
     )
 
     study.optimize(
         objective,
         n_trials=500
     )
-    
+
     # =====================================
     # Final Results
     # =====================================
@@ -228,29 +228,23 @@ def optimize(company):
     current_prediction = model.predict(company)[0]
 
     best_prediction = study.best_value
-    best_params = study.best_params
 
-    if best_prediction <= current_prediction:
-        optimized_prediction = current_prediction
-        improvement = 0.0
-        recommended_values = {}
-    else:
-        optimized_prediction = best_prediction
-        improvement = (
-            (optimized_prediction - current_prediction)
-            / current_prediction
-        ) * 100
-        recommended_values = best_params
+    improvement = (
+        (best_prediction - current_prediction)
+        / current_prediction
+    ) * 100
 
     return {
+
         "current_prediction": float(current_prediction),
-        "optimized_prediction": float(optimized_prediction),
+
+        "optimized_prediction": float(best_prediction),
+
         "improvement_percent": float(improvement),
-        "recommended_values": recommended_values
-}
-        
 
+        "recommended_values": study.best_params
 
+    }
 
 def analyze(company):
 
